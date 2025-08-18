@@ -9,7 +9,7 @@ public enum LoggingLevel
 
 public static class Logging
 {
-    private static int _backingFieldAccess = 0;
+    private static int _backingFieldAccess;
     private static bool _isLoggingEnabled;
 
     public static bool IsLoggingEnabled
