@@ -1,0 +1,15 @@
+# JetBrains IDEs
+.idea/
+
+# Utils project
+src/Utils/bin/
+src/Utils/obj/
+
+# Utils.Tests project
+src/Utils.Tests/bin/
+src/Utils.Tests/obj/
+
+# Optional: Ignore user-specific Visual Studio files
+*.user
+*.suo
+*.vs/
