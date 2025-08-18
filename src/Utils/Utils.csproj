@@ -6,10 +6,28 @@
         <Nullable>enable</Nullable>
         <AssemblyName>Webamoki.Utils</AssemblyName>
         <RootNamespace>Webamoki.Utils</RootNamespace>
+
+        <!-- NuGet package metadata -->
+        <PackageId>Webamoki.Utils</PackageId>
+        <Version>1.0.1</Version>
+        <Authors>Webamoki</Authors>
+        <Company>Webamoki</Company>
+        <Description>A utility library for Webamoki .NET C#</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/Webamoki/Utils</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Webamoki/Utils.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
     </ItemGroup>
+
 </Project>
