@@ -74,8 +74,17 @@ public static class Ensure
     {
         Assert.That(condition, Is.True);
     }
+    public static void True(object? condition)
+    {
+        Assert.That(condition, Is.True);
+    }
 
     public static void False(bool condition)
+    {
+        Assert.That(condition, Is.False);
+    }
+    
+    public static void False(object? condition)
     {
         Assert.That(condition, Is.False);
     }
