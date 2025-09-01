@@ -46,17 +46,17 @@ public static class Ensure
         Throws<Exception>(code, message);
     }
 
-    public static void Equal(object? expected, object? actual)
+    public static void Equal( object? actual, object? expected)
     {
         Assert.That(actual, Is.EqualTo(expected));
     }
 
-    public static void NotEqual(object expected, object actual)
+    public static void NotEqual(object actual,object expected)
     {
         Assert.That(actual, Is.Not.EqualTo(expected));
     }
 
-    public static void Order<T>(LinkedList<T> list, T[] expected)
+    public static void Order<T>( T[] expected, LinkedList<T> list)
     {
         var i = 0;
         for (var first = list.First; first != null; first = first.Next, i++)
@@ -114,12 +114,12 @@ public static class Ensure
         Assert.That(actual, Does.Match(pattern));
     }
 
-    public static void IsInstanceOf(Type expectedType, object? actual)
+    public static void IsInstanceOf(object? actual, Type expectedType)
     {
         Assert.That(actual, Is.InstanceOf(expectedType));
     }
 
-    public static void IsAssignableFrom(Type expectedType, object? actual)
+    public static void IsAssignableFrom( object? actual, Type expectedType)
     {
         Assert.That(actual, Is.AssignableFrom(expectedType));
     }

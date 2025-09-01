@@ -9,7 +9,7 @@
 
         <!-- NuGet package metadata -->
         <PackageId>Webamoki.Utils</PackageId>
-        <Version>1.0.3</Version>
+        <Version>1.0.4</Version>
         <Authors>Webamoki</Authors>
         <Company>Webamoki</Company>
         <Description>A utility library for Webamoki .NET C#</Description>

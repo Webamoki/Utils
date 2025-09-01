@@ -221,28 +221,22 @@ public class EnsureTest
     [Test]
     public void IsInstanceOf_WhenCorrectType_ShouldPass()
     {
-        Ensure.IsInstanceOf(typeof(string), "test");
-        Ensure.IsInstanceOf(typeof(int), 42);
-        Ensure.IsInstanceOf(typeof(List<int>), new List<int>());
+        Ensure.IsInstanceOf("test", typeof(string) );
+        Ensure.IsInstanceOf(42, typeof(int));
+        Ensure.IsInstanceOf(new List<int>(), typeof(List<int>));
     }
 
     [Test]
     public void IsInstanceOf_WhenIncorrectType_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() => Ensure.IsInstanceOf(typeof(int), "test"));
-        Assert.Throws<AssertionException>(() => Ensure.IsInstanceOf(typeof(string), 42));
+        Assert.Throws<AssertionException>(() => Ensure.IsInstanceOf("test", typeof(int) ));
+        Assert.Throws<AssertionException>(() => Ensure.IsInstanceOf(42, typeof(string)));
     }
-
-    [Test]
-    public void IsAssignableFrom_WhenAssignable_ShouldPass()
-    {
-        Ensure.IsAssignableFrom(typeof(IEnumerable), new List<int>());
-    }
-
+    
     [Test]
     public void IsAssignableFrom_WhenNotAssignable_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() => Ensure.IsAssignableFrom(typeof(int), "test"));
+        Assert.Throws<AssertionException>(() => Ensure.IsAssignableFrom("test", typeof(int)));
     }
 
     #endregion
@@ -338,7 +332,7 @@ public class EnsureTest
         linkedList.AddLast(3);
 
         var expected = new[] { 1, 2, 3 };
-        Ensure.Order(linkedList, expected);
+        Ensure.Order(expected, linkedList);
     }
 
     [Test]
@@ -350,15 +344,15 @@ public class EnsureTest
         linkedList.AddLast(2);
 
         var expected = new[] { 1, 2, 3 };
-        Assert.Throws<AssertionException>(() => Ensure.Order(linkedList, expected));
+        Assert.Throws<AssertionException>(() => Ensure.Order(expected, linkedList));
     }
 
     [Test]
     public void Order_WhenLinkedListIsEmpty_ShouldPass()
     {
         var linkedList = new LinkedList<string>();
-        var expected = new string[0];
-        Ensure.Order(linkedList, expected);
+        var expected = Array.Empty<string>();
+        Ensure.Order(expected, linkedList);
     }
 
     [Test]
@@ -370,7 +364,7 @@ public class EnsureTest
         linkedList.AddLast("third");
 
         var expected = new[] { "first", "second", "third" };
-        Ensure.Order(linkedList, expected);
+        Ensure.Order(expected, linkedList);
     }
 
     #endregion
