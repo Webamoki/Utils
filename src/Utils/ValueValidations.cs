@@ -43,14 +43,11 @@ public static partial class ValueValidations
         bool allowNegative = false
     )
     {
-        if (value == null)
-        {
-            if (allowNull) return true;
-            throw new Exception("Null value not allowed");
-        }
+        if (value == null) return allowNull ? true : throw new Exception("Null value not allowed");
 
         if (validValues != null)
-            if (validValues.Contains(value)) return true;
+            if (validValues.Contains(value))
+                return true;
 
         if (value is int intValue)
         {
