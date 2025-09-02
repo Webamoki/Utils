@@ -44,9 +44,10 @@ Install-Package Webamoki.Utils
 - **Security Checks**: Built-in protection against malicious input
 
 ### 📝 Logging
-- **Console Logging**: Colored console output with different log levels
-- **Debug Support**: Specialized debug logging functionality
-- **Configurable**: Enable/disable logging as needed
+- **Console Logging**: Colored console output with different log levels (Debug, Info, Warn, Error)
+- **Flexible Control**: Enable/disable logging anytime without errors
+- **Log Buffering**: Hold logs with labels for later retrieval and analysis
+- **Thread-Safe**: Concurrent access support for multi-threaded applications
 
 ### 🔧 String Extensions
 - **Enhanced String Operations**: Additional string manipulation methods
@@ -138,16 +139,38 @@ bool isValid = ValueValidations.Check(
 ```csharp
 using Webamoki.Utils;
 
-// Enable logging
-Logging.IsLoggingEnabled = true;
+// Enable/disable logging (safe to call multiple times)
+Logging.Enable();
+Logging.Disable();
+Logging.IsLoggingEnabled = true; // Can also set directly
 
 // Log messages with different levels
-Logging.WriteLog("Application started", LoggingLevel.Info);
-Logging.WriteLog("Warning: Low disk space", LoggingLevel.Warn);
-Logging.WriteLog("Error occurred", LoggingLevel.Error, ConsoleColor.Red);
+Logging.WriteDebug("Debug information");
+Logging.WriteInfo("Application started");
+Logging.WriteWarn("Warning: Low disk space");
+Logging.WriteError("Error occurred");
 
-// Debug logging
-Logging.WriteDebugLog("Debug information");
+// Custom colors
+Logging.WriteLog("Custom message", LoggingLevel.Info, ConsoleColor.Green);
+
+// Buffer logs with labels for later retrieval
+Logging.WriteDebug("User logged in", "user-actions");
+Logging.WriteInfo("User updated profile", "user-actions");
+Logging.WriteError("Database connection failed", "errors");
+
+// Initialize a buffer (optional - buffers are created automatically)
+Logging.Hold("system-events");
+
+// Retrieve buffered logs
+var userActionLogs = Logging.GetHeldLogs("user-actions");
+var errorLogs = Logging.GetHeldLogs("errors");
+
+// Get all buffer labels
+var allLabels = Logging.GetBufferLabels();
+
+// Clear specific or all buffered logs
+Logging.ClearHeldLogs("user-actions");
+Logging.ClearAllHeldLogs();
 ```
 
 ## Dependencies

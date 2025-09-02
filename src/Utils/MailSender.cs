@@ -48,7 +48,7 @@ public class MailSender
         }
         catch (Exception ex)
         {
-            if (Logging.IsLoggingEnabled) Logging.WriteLog($"Error sending email to {string.Join(", ", Message.To.Select(t => t.Address.ToString()))}\n{ex.Message}");
+            Logging.WriteLog($"Error sending email to {string.Join(", ", Message.To.Select(t => t.Address.ToString()))}\n{ex.Message}");
         }
     }
 
