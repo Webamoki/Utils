@@ -26,12 +26,7 @@ public class LoggingTest
     #region Enable/Disable Tests
 
     [Test]
-    public void Enable_SetsLoggingToEnabled()
-    {
-        Logging.Enable();
-        // We can't directly test _isEnabled, but we can test behavior
-        // This test ensures Enable() doesn't throw
-    }
+    public void Enable_SetsLoggingToEnabled() => Logging.Enable();// We can't directly test _isEnabled, but we can test behavior// This test ensures Enable() doesn't throw
 
     [Test]
     public void Disable_SetsLoggingToDisabled()
@@ -326,11 +321,7 @@ public class LoggingTest
     }
 
     [Test]
-    public void ClearHeldLogs_NonExistentLabel_DoesNotThrow()
-    {
-        Logging.ClearHeldLogs("non-existent");
-        // Should not throw
-    }
+    public void ClearHeldLogs_NonExistentLabel_DoesNotThrow() => Logging.ClearHeldLogs("non-existent");// Should not throw
 
     [Test]
     public void ClearBuffer_RemovesAllBufferedLogs()
@@ -490,12 +481,12 @@ public class LoggingTest
         const int messagesPerThread = 100;
         var tasks = new Task[threadCount];
 
-        for (int i = 0; i < threadCount; i++)
+        for (var i = 0 ; i < threadCount ; i++)
         {
-            int threadId = i;
+            var threadId = i;
             tasks[i] = Task.Run(() =>
             {
-                for (int j = 0; j < messagesPerThread; j++)
+                for (var j = 0 ; j < messagesPerThread ; j++)
                 {
                     Logging.WriteLog($"Thread {threadId} Message {j}", label: $"thread-{threadId}");
                     Logging.Hold($"hold-{threadId}-{j}");

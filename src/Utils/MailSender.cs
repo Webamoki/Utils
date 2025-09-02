@@ -58,10 +58,7 @@ public class MailSender
         Message.IsBodyHtml = true;
     }
 
-    public void AttachFile(string filePath, string? name = null)
-    {
-        Message.Attachments.Add(string.IsNullOrEmpty(name) ? new Attachment(filePath) : new Attachment(filePath, name));
-    }
+    public void AttachFile(string filePath, string? name = null) => Message.Attachments.Add(string.IsNullOrEmpty(name) ? new Attachment(filePath) : new Attachment(filePath, name));
 
     public void AttachImage(string filePath, string contentId)
     {

@@ -1,5 +1,5 @@
-﻿using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System.Text;
 using Webamoki.Utils;
 
 namespace Utils.Tests;
@@ -19,9 +19,7 @@ public class EmbeddedResourceHandlerTest
     }
 
     [Test]
-    public void Exists_ReturnsTrue()
-    {
+    public void Exists_ReturnsTrue() =>
         //Assert
         Assert.That(EmbeddedResourceHandler.Exists(GetType().Assembly, "test.txt"));
-    }
 }

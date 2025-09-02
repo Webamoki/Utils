@@ -13,25 +13,18 @@ public record LogEntry(DateTime Timestamp, LoggingLevel Level, string Message, C
 public static class Logging
 {
     private static bool _isEnabled;
-    private static readonly Dictionary<string, List<LogEntry>> LogBuffer = new();
+    private static readonly Dictionary<string, List<LogEntry>> LogBuffer = [];
     private static readonly Lock BufferLock = new();
-    
 
     /// <summary>
     /// Enable logging. Safe to call multiple times.
     /// </summary>
-    public static void Enable()
-    {
-        _isEnabled = true;
-    }
+    public static void Enable() => _isEnabled = true;
 
     /// <summary>
     /// Disable logging. Safe to call multiple times.
     /// </summary>
-    public static void Disable()
-    {
-        _isEnabled = false;
-    }
+    public static void Disable() => _isEnabled = false;
 
     /// <summary>
     /// Write a log message to console if logging is enabled, optionally buffer it with a label
@@ -56,6 +49,7 @@ public static class Logging
                 {
                     LogBuffer[label] = [];
                 }
+
                 LogBuffer[label].Add(logEntry);
             }
         }
@@ -71,40 +65,28 @@ public static class Logging
     /// </summary>
     /// <param name="message">The debug message to log</param>
     /// <param name="label">Optional label to buffer the log for later retrieval</param>
-    public static void WriteDebug(string message, string? label = null)
-    {
-        WriteLog(message, LoggingLevel.Debug, ConsoleColor.DarkMagenta, label);
-    }
+    public static void WriteDebug(string message, string? label = null) => WriteLog(message, LoggingLevel.Debug, ConsoleColor.DarkMagenta, label);
 
     /// <summary>
     /// Write an info log message
     /// </summary>
     /// <param name="message">The info message to log</param>
     /// <param name="label">Optional label to buffer the log for later retrieval</param>
-    public static void WriteInfo(string message, string? label = null)
-    {
-        WriteLog(message, LoggingLevel.Info, ConsoleColor.Blue, label);
-    }
+    public static void WriteInfo(string message, string? label = null) => WriteLog(message, LoggingLevel.Info, ConsoleColor.Blue, label);
 
     /// <summary>
     /// Write a warning log message
     /// </summary>
     /// <param name="message">The warning message to log</param>
     /// <param name="label">Optional label to buffer the log for later retrieval</param>
-    public static void WriteWarn(string message, string? label = null)
-    {
-        WriteLog(message, LoggingLevel.Warn, ConsoleColor.Yellow, label);
-    }
+    public static void WriteWarn(string message, string? label = null) => WriteLog(message, LoggingLevel.Warn, ConsoleColor.Yellow, label);
 
     /// <summary>
     /// Write an error log message
     /// </summary>
     /// <param name="message">The error message to log</param>
     /// <param name="label">Optional label to buffer the log for later retrieval</param>
-    public static void WriteError(string message, string? label = null)
-    {
-        WriteLog(message, LoggingLevel.Error, ConsoleColor.Red, label);
-    }
+    public static void WriteError(string message, string? label = null) => WriteLog(message, LoggingLevel.Error, ConsoleColor.Red, label);
 
     /// <summary>
     /// Initialize a buffer with a specific label for holding logs
@@ -131,7 +113,7 @@ public static class Logging
         lock (BufferLock)
         {
             return LogBuffer.TryGetValue(label, out var logs)
-                ? [..logs]
+                ? [.. logs]
                 : [];
         }
     }
@@ -144,7 +126,7 @@ public static class Logging
     {
         lock (BufferLock)
         {
-            LogBuffer.Remove(label, out _);
+            _ = LogBuffer.Remove(label, out _);
         }
     }
 

@@ -7,7 +7,7 @@ namespace Webamoki.Utils;
 public static partial class ValueValidations
 {
     public static bool HasBannedCharacters(string value) => BannedCharactersRegex().IsMatch(value);
-    
+
     public static bool CheckGlobalCSS(
         object? value,
         HashSet<object>? validValues = null,
@@ -70,7 +70,6 @@ public static partial class ValueValidations
             throw new Exception("Negative value not allowed");
         }
 
-
         // ReSharper disable once InvertIf
         if (
             (stringPixel || stringRem || stringPercentage || stringInt || stringDouble) &&
@@ -101,7 +100,6 @@ public static partial class ValueValidations
 
         throw new Exception("Invalid type");
     }
-
 
     [GeneratedRegex(@"^([1-9]\d*|([1-9]\d*\.\d*[1-9])|\.\d*[1-9])$")]
     private static partial Regex StringDoubleRegex();

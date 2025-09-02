@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System.Collections;
 using Webamoki.Utils.Testing;
 
 namespace Utils.Tests.Testing;
@@ -10,16 +10,14 @@ public class EnsureTest
     #region Throws Tests
 
     [Test]
-    public void Throws_WithFunc_WhenExceptionThrown_ShouldPass()
-    {
+    public void Throws_WithFunc_WhenExceptionThrown_ShouldPass() =>
         // Should not throw an assertion exception
         Ensure.Throws(() => throw new InvalidOperationException("Test exception"));
-    }
 
     [Test]
     public void Throws_WithFunc_WhenNoExceptionThrown_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() =>
+        _ = Assert.Throws<AssertionException>(() =>
             Ensure.Throws(() => "No exception"));
     }
 
@@ -33,28 +31,18 @@ public class EnsureTest
     [Test]
     public void Throws_WithFuncAndMessage_WhenCorrectExceptionButWrongMessage_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() =>
+        _ = Assert.Throws<AssertionException>(() =>
             Ensure.Throws(() => throw new InvalidOperationException("Wrong message"), "Expected message"));
     }
 
     [Test]
-    public void ThrowsGeneric_WithFunc_WhenCorrectExceptionType_ShouldPass()
-    {
-        Ensure.Throws<ArgumentException>(() => throw new ArgumentException("Test"));
-    }
-
+    public void ThrowsGeneric_WithFunc_WhenCorrectExceptionType_ShouldPass() => Ensure.Throws<ArgumentException>(() => throw new ArgumentException("Test"));
 
     [Test]
-    public void ThrowsGeneric_WithTestDelegate_WhenCorrectExceptionType_ShouldPass()
-    {
-        Ensure.Throws<ArgumentException>(() => throw new ArgumentException("Test"));
-    }
+    public void ThrowsGeneric_WithTestDelegate_WhenCorrectExceptionType_ShouldPass() => Ensure.Throws<ArgumentException>(() => throw new ArgumentException("Test"));
 
     [Test]
-    public void Throws_WithTestDelegate_WhenExceptionThrown_ShouldPass()
-    {
-        Ensure.Throws(() => throw new Exception("Test"));
-    }
+    public void Throws_WithTestDelegate_WhenExceptionThrown_ShouldPass() => Ensure.Throws(() => throw new Exception("Test"));
 
     #endregion
 
@@ -71,8 +59,8 @@ public class EnsureTest
     [Test]
     public void Equal_WhenValuesAreNotEqual_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() => Ensure.Equal(5, 10));
-        Assert.Throws<AssertionException>(() => Ensure.Equal("test", "different"));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Equal(5, 10));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Equal("test", "different"));
     }
 
     [Test]
@@ -85,8 +73,8 @@ public class EnsureTest
     [Test]
     public void NotEqual_WhenValuesAreEqual_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() => Ensure.NotEqual(5, 5));
-        Assert.Throws<AssertionException>(() => Ensure.NotEqual("test", "test"));
+        _ = Assert.Throws<AssertionException>(() => Ensure.NotEqual(5, 5));
+        _ = Assert.Throws<AssertionException>(() => Ensure.NotEqual("test", "test"));
     }
 
     #endregion
@@ -103,8 +91,8 @@ public class EnsureTest
     [Test]
     public void True_WithBool_WhenFalse_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() => Ensure.True(false));
-        Assert.Throws<AssertionException>(() => Ensure.True(5 < 3));
+        _ = Assert.Throws<AssertionException>(() => Ensure.True(false));
+        _ = Assert.Throws<AssertionException>(() => Ensure.True(5 < 3));
     }
 
     [Test]
@@ -125,15 +113,12 @@ public class EnsureTest
     [Test]
     public void False_WithBool_WhenTrue_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() => Ensure.False(true));
-        Assert.Throws<AssertionException>(() => Ensure.False(5 > 3));
+        _ = Assert.Throws<AssertionException>(() => Ensure.False(true));
+        _ = Assert.Throws<AssertionException>(() => Ensure.False(5 > 3));
     }
 
     [Test]
-    public void False_WithObject_WhenFalse_ShouldPass()
-    {
-        Ensure.False((object)false);
-    }
+    public void False_WithObject_WhenFalse_ShouldPass() => Ensure.False((object)false);
 
     #endregion
 
@@ -150,8 +135,8 @@ public class EnsureTest
     [Test]
     public void Null_WhenObjectIsNotNull_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() => Ensure.Null("not null"));
-        Assert.Throws<AssertionException>(() => Ensure.Null(42));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Null("not null"));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Null(42));
     }
 
     [Test]
@@ -165,9 +150,9 @@ public class EnsureTest
     [Test]
     public void NotNull_WhenObjectIsNull_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() => Ensure.NotNull(null));
+        _ = Assert.Throws<AssertionException>(() => Ensure.NotNull(null));
         string? nullString = null;
-        Assert.Throws<AssertionException>(() => Ensure.NotNull(nullString));
+        _ = Assert.Throws<AssertionException>(() => Ensure.NotNull(nullString));
     }
 
     #endregion
@@ -182,10 +167,7 @@ public class EnsureTest
     }
 
     [Test]
-    public void Contains_WhenSubstringDoesNotExist_ShouldThrowAssertionException()
-    {
-        Assert.Throws<AssertionException>(() => Ensure.Contains("xyz", "This is a test string"));
-    }
+    public void Contains_WhenSubstringDoesNotExist_ShouldThrowAssertionException() => _ = Assert.Throws<AssertionException>(() => Ensure.Contains("xyz", "This is a test string"));
 
     [Test]
     public void DoesNotContain_WhenSubstringDoesNotExist_ShouldPass()
@@ -195,10 +177,7 @@ public class EnsureTest
     }
 
     [Test]
-    public void DoesNotContain_WhenSubstringExists_ShouldThrowAssertionException()
-    {
-        Assert.Throws<AssertionException>(() => Ensure.DoesNotContain("test", "This is a test string"));
-    }
+    public void DoesNotContain_WhenSubstringExists_ShouldThrowAssertionException() => _ = Assert.Throws<AssertionException>(() => Ensure.DoesNotContain("test", "This is a test string"));
 
     [Test]
     public void Matches_WhenPatternMatches_ShouldPass()
@@ -210,8 +189,8 @@ public class EnsureTest
     [Test]
     public void Matches_WhenPatternDoesNotMatch_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() => Ensure.Matches(@"\d+", "abc"));
-        Assert.Throws<AssertionException>(() => Ensure.Matches(@"^[A-Z][a-z]+$", "hello"));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Matches(@"\d+", "abc"));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Matches(@"^[A-Z][a-z]+$", "hello"));
     }
 
     #endregion
@@ -221,7 +200,7 @@ public class EnsureTest
     [Test]
     public void IsInstanceOf_WhenCorrectType_ShouldPass()
     {
-        Ensure.IsInstanceOf("test", typeof(string) );
+        Ensure.IsInstanceOf("test", typeof(string));
         Ensure.IsInstanceOf(42, typeof(int));
         Ensure.IsInstanceOf(new List<int>(), typeof(List<int>));
     }
@@ -229,15 +208,12 @@ public class EnsureTest
     [Test]
     public void IsInstanceOf_WhenIncorrectType_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() => Ensure.IsInstanceOf("test", typeof(int) ));
-        Assert.Throws<AssertionException>(() => Ensure.IsInstanceOf(42, typeof(string)));
+        _ = Assert.Throws<AssertionException>(() => Ensure.IsInstanceOf("test", typeof(int)));
+        _ = Assert.Throws<AssertionException>(() => Ensure.IsInstanceOf(42, typeof(string)));
     }
-    
+
     [Test]
-    public void IsAssignableFrom_WhenNotAssignable_ShouldThrowAssertionException()
-    {
-        Assert.Throws<AssertionException>(() => Ensure.IsAssignableFrom("test", typeof(int)));
-    }
+    public void IsAssignableFrom_WhenNotAssignable_ShouldThrowAssertionException() => _ = Assert.Throws<AssertionException>(() => Ensure.IsAssignableFrom("test", typeof(int)));
 
     #endregion
 
@@ -257,14 +233,14 @@ public class EnsureTest
     public void Single_WhenCollectionIsEmpty_ShouldThrowAssertionException()
     {
         var emptyList = new List<int>();
-        Assert.Throws<AssertionException>(() => Ensure.Single(emptyList));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Single(emptyList));
     }
 
     [Test]
     public void Single_WhenCollectionHasMultipleItems_ShouldThrowAssertionException()
     {
         var multipleItemsList = new List<int> { 1, 2, 3 };
-        Assert.Throws<AssertionException>(() => Ensure.Single(multipleItemsList));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Single(multipleItemsList));
     }
 
     [Test]
@@ -281,7 +257,7 @@ public class EnsureTest
     public void Empty_WithCollection_WhenCollectionHasItems_ShouldThrowAssertionException()
     {
         var nonEmptyList = new List<int> { 1, 2, 3 };
-        Assert.Throws<AssertionException>(() => Ensure.Empty(nonEmptyList));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Empty(nonEmptyList));
     }
 
     [Test]
@@ -294,8 +270,8 @@ public class EnsureTest
     [Test]
     public void Empty_WithString_WhenStringIsNotEmpty_ShouldThrowAssertionException()
     {
-        Assert.Throws<AssertionException>(() => Ensure.Empty("not empty"));
-        Assert.Throws<AssertionException>(() => Ensure.Empty(" "));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Empty("not empty"));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Empty(" "));
     }
 
     [Test]
@@ -315,8 +291,8 @@ public class EnsureTest
     public void Count_WhenCollectionHasUnexpectedCount_ShouldThrowAssertionException()
     {
         var list = new List<int> { 1, 2, 3 };
-        Assert.Throws<AssertionException>(() => Ensure.Count(list, 5));
-        Assert.Throws<AssertionException>(() => Ensure.Count(list, 0));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Count(list, 5));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Count(list, 0));
     }
 
     #endregion
@@ -327,9 +303,9 @@ public class EnsureTest
     public void Order_WhenLinkedListMatchesExpectedOrder_ShouldPass()
     {
         var linkedList = new LinkedList<int>();
-        linkedList.AddLast(1);
-        linkedList.AddLast(2);
-        linkedList.AddLast(3);
+        _ = linkedList.AddLast(1);
+        _ = linkedList.AddLast(2);
+        _ = linkedList.AddLast(3);
 
         var expected = new[] { 1, 2, 3 };
         Ensure.Order(expected, linkedList);
@@ -339,12 +315,12 @@ public class EnsureTest
     public void Order_WhenLinkedListDoesNotMatchExpectedOrder_ShouldThrowAssertionException()
     {
         var linkedList = new LinkedList<int>();
-        linkedList.AddLast(1);
-        linkedList.AddLast(3);
-        linkedList.AddLast(2);
+        _ = linkedList.AddLast(1);
+        _ = linkedList.AddLast(3);
+        _ = linkedList.AddLast(2);
 
         var expected = new[] { 1, 2, 3 };
-        Assert.Throws<AssertionException>(() => Ensure.Order(expected, linkedList));
+        _ = Assert.Throws<AssertionException>(() => Ensure.Order(expected, linkedList));
     }
 
     [Test]
@@ -359,9 +335,9 @@ public class EnsureTest
     public void Order_WithStringLinkedList_WhenOrderMatches_ShouldPass()
     {
         var linkedList = new LinkedList<string>();
-        linkedList.AddLast("first");
-        linkedList.AddLast("second");
-        linkedList.AddLast("third");
+        _ = linkedList.AddLast("first");
+        _ = linkedList.AddLast("second");
+        _ = linkedList.AddLast("third");
 
         var expected = new[] { "first", "second", "third" };
         Ensure.Order(expected, linkedList);

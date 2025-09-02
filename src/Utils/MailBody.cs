@@ -23,7 +23,7 @@ public class MailBody
 
     public void AddTitle(string title)
     {
-        _htmlBody.Append($"""
+        _ = _htmlBody.Append($"""
                           <table style="width: 600px;" width="600" border="0" cellpadding="0" cellspacing="0"  class="full-width">
                               <tr>
                                   <td style="text-align: center;background-color: #fff;padding: 20px 20px;padding-top: 10px;" class="full-width">
@@ -38,7 +38,7 @@ public class MailBody
 
     public void AddContent(string content)
     {
-        _htmlBody.Append($"""
+        _ = _htmlBody.Append($"""
                           <table style="width: 600px;" width="600" border="0" cellpadding="0" cellspacing="0"  class="full-width">
                               <tr>
                                   <td style="text-align: center;background-color: #fff;padding: 20px 20px;padding-top: 0px;" class="full-width">
@@ -51,7 +51,7 @@ public class MailBody
 
     public void AddText(string text)
     {
-        _htmlBody.Append($"""
+        _ = _htmlBody.Append($"""
                           <table style="width: 600px;" width="600" border="0" cellpadding="0" cellspacing="0"  class="full-width">
                               <tr>
                                   <td style="text-align: left;background-color: #fff;padding: 0 20px 20px;" class="full-width">
@@ -72,7 +72,7 @@ public class MailBody
     /// <param name="colorValue">Provided as a color hexcode value including #</param>
     public void AddButton(string link, string text, string colorValue)
     {
-        _htmlBody.Append($"""
+        _ = _htmlBody.Append($"""
                          <table style="width: 600px;" width="600" border="0" cellpadding="0" cellspacing="0" class="full-width">
                              <tbody>
                                  <tr>
@@ -103,7 +103,7 @@ public class MailBody
 
     public void AddImage(string imageSrc)
     {
-        _htmlBody.Append($"""
+        _ = _htmlBody.Append($"""
                           <table style="width: 600px;" width="600" border="0" cellpadding="0" cellspacing="0"  class="full-width">
                               <tr>
                                   <td style="text-align: center;background-color: #fff;padding: 20px 0px;padding-top: 30px;" class="full-width">
@@ -117,7 +117,7 @@ public class MailBody
     // TODO: Move to Products Package
     public void AddOrderLine(string name, string link, string imageSrc, string price, int quantity)
     {
-        _htmlBody.Append($"""
+        _ = _htmlBody.Append($"""
                           <table style="width: 600px;" width="600" border="0" cellpadding="0" cellspacing="0"  class="full-width">
                               <tr>
                                   <td style="text-align: center;background-color: #fff;padding: 20px 20px;padding-top: 30px;padding-bottom: 0px;" class="full-width">
@@ -156,6 +156,7 @@ public class MailBody
         {
             column1Content += $"<p style=\"margin: 0;color: #000;font-size: 14px;\">{column1Enumator.Current}</p>";
         }
+
         column1Enumator.Dispose();
 
         var column2Content = "";
@@ -164,9 +165,10 @@ public class MailBody
         {
             column2Content += $"<p style=\"margin: 0;color: #000;font-size: 14px;\">{column2Enumator.Current}</p>";
         }
+
         column2Enumator.Dispose();
 
-        _htmlBody.Append($"""
+        _ = _htmlBody.Append($"""
                           <table style="width: 600px;" width="600" border="0" cellpadding="0" cellspacing="0"  class="full-width">
                               <tr>
                                   <td style="text-align: center;background-color: #fff;padding: 20px 20px" class="full-width">
@@ -204,21 +206,21 @@ public class MailBody
     public void AddOrderPrices(List<(string name, string price)> prices)
     {
         var index = 0;
-        foreach (var priceDisplay in prices)
+        foreach (var (name, price) in prices)
         {
             index++;
             var border = index == 1 ? "border-top: 2px solid #e5e5e5;" : "";
             if (index == prices.Count) border = "border-bottom: 2px solid #e5e5e5;padding-bottom:15px;";
             var padding = index == prices.Count ? "0 20px 20px 20px" : "0 20px";
 
-            _htmlBody.Append($"""
+            _ = _htmlBody.Append($"""
                               <table style="width: 600px;" width="600" border="0" cellpadding="0" cellspacing="0"  class="full-width">
                                   <tr>
                                       <td style="text-align: center;background-color: #fff;padding: {padding}" class="full-width">
                                           <table style="width: 560px;" width="560" border="0" cellpadding="0" cellspacing="0"  class="full-width">
                                               <tr>
                                                   <td style="{border} text-align: right;padding-top: 15px;">
-                                                      <p style="margin: 0;color: #000;font-size: 22px;"><b>{priceDisplay.name}:</b> &nbsp;&nbsp; {priceDisplay.price}</p>
+                                                      <p style="margin: 0;color: #000;font-size: 22px;"><b>{name}:</b> &nbsp;&nbsp; {price}</p>
                                                   </td>
                                               </tr>
                                           </table>
@@ -229,11 +231,9 @@ public class MailBody
         }
     }
 
-    private string GetSocialsSection()
-    {
+    private string GetSocialsSection() =>
         // TODO: Implement this after BrandIdentity::SOCIALS is migrated
-        return "";
-    }
+        "";
 
     public string GetHTMLBody(string companyName,
         string contactPhone,

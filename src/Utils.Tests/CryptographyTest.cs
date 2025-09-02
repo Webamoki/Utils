@@ -53,7 +53,7 @@ public class CryptographyTest
         const string expected = "test";
 
         // Act
-        Cryptography.TryDecode(hexValue, out var decodedValue);
+        _ = Cryptography.TryDecode(hexValue, out var decodedValue);
 
         // Assert
         Ensure.Equal(expected, decodedValue);
@@ -66,7 +66,6 @@ public class CryptographyTest
         Ensure.False(Cryptography.TryDecode("sxx", out _));
         Ensure.False(Cryptography.TryDecode("sade", out _));
     }
-
 
     [Test]
     public void TrySecureDecode_AfterSecureEncode_ShouldReturnOriginalString()
@@ -94,7 +93,6 @@ public class CryptographyTest
         Ensure.False(success);
     }
 
-
     [Test]
     public void IntToBaseX_ShouldReturnExpectedBaseXString()
     {
@@ -111,8 +109,5 @@ public class CryptographyTest
     }
 
     [Test]
-    public void IntToBaseX_NegativeValue_ThrowException()
-    {
-        Ensure.Throws(() => Cryptography.IntToBaseX(-1, "sd"));
-    }
+    public void IntToBaseX_NegativeValue_ThrowException() => Ensure.Throws(() => Cryptography.IntToBaseX(-1, "sd"));
 }

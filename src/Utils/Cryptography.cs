@@ -23,7 +23,7 @@ public static partial class Cryptography
         var token = new char[length];
         var max = selectedPool.Length;
 
-        for (var i = 0; i < length; i++) token[i] = selectedPool[CryptoRandSecure(max)];
+        for (var i = 0 ; i < length ; i++) token[i] = selectedPool[CryptoRandSecure(max)];
 
         return new string(token);
     }
@@ -32,7 +32,7 @@ public static partial class Cryptography
     {
         var range = max - 0;
         var log = Math.Log(range, 2);
-        var bytes = (int)(log / 8 + 1);
+        var bytes = (int)((log / 8) + 1);
         var bits = (int)(log + 1);
         var filter = (1 << bits) - 1;
         int rnd;
@@ -41,7 +41,7 @@ public static partial class Cryptography
         {
             rnd = 0;
             var randomBytes = RandomNumberGenerator.GetBytes(bytes);
-            for (var i = 0; i < randomBytes.Length; i++) rnd |= randomBytes[i] << (8 * i);
+            for (var i = 0 ; i < randomBytes.Length ; i++) rnd |= randomBytes[i] << (8 * i);
 
             rnd &= filter;
         } while (rnd >= range);
@@ -71,14 +71,14 @@ public static partial class Cryptography
         var bytes = Encoding.UTF8.GetBytes(value);
         // In HTML, ids and classes cannot start with a number, they must start with a letter, s is arbitrarily chosen
         var hexString = new StringBuilder("s");
-        foreach (var b in bytes) hexString.Append(b.ToString("x2"));
+        foreach (var b in bytes) _ = hexString.Append(b.ToString("x2"));
         return hexString.ToString();
     }
 
     private static string Encode(byte[] value)
     {
         var hexString = new StringBuilder();
-        foreach (var b in value) hexString.Append(b.ToString("x2"));
+        foreach (var b in value) _ = hexString.Append(b.ToString("x2"));
         return Encode(hexString.ToString());
     }
 
@@ -121,17 +121,14 @@ public static partial class Cryptography
     /// <param name="value"></param>
     /// <param name="hash"></param>
     /// <returns></returns>
-    public static bool Verify(string value, string hash)
-    {
-        return TryDecode(hash, out var decodedValue) && BCrypt.Net.BCrypt.Verify(value, decodedValue);
-    }
+    public static bool Verify(string value, string hash) => TryDecode(hash, out var decodedValue) && BCrypt.Net.BCrypt.Verify(value, decodedValue);
 
     private static byte[] ConvertHexadecimalStringToByteArray(string hexadecimal)
     {
         var length = hexadecimal.Length;
         var bytes = new byte[length / 2];
 
-        for (var i = 0; i < length; i += 2)
+        for (var i = 0 ; i < length ; i += 2)
             bytes[i / 2] = Convert.ToByte(hexadecimal.Substring(i, 2), 16);
 
         return bytes;
