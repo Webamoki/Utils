@@ -38,19 +38,16 @@ public static class Logging
         ConsoleColor? foregroundColor = null,
         string? label = null)
     {
+        if (!_isEnabled) return;
         var logEntry = new LogEntry(DateTime.Now, level, message, foregroundColor);
 
-        // Buffer the log if a label is provided
         if (!string.IsNullOrEmpty(label))
             lock (BufferLock)
-            {
-                if (!LogBuffer.ContainsKey(label)) LogBuffer[label] = [];
+                // Buffer the log if buffering logs exist
+                if (LogBuffer.TryGetValue(label, out var value))
+                    value.Add(logEntry);
 
-                LogBuffer[label].Add(logEntry);
-            }
-
-        // Write to console if logging is enabled
-        if (_isEnabled) WriteLogEntry(logEntry);
+        WriteLogEntry(logEntry);
     }
 
     /// <summary>

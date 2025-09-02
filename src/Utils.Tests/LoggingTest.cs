@@ -77,11 +77,27 @@ public class LoggingTest
     }
 
     [Test]
-    public void WriteLog_WithLabel_BuffersLog()
+    public void WriteLog_WithLabelButNoBuffer_DoesNotBuffer()
     {
         const string label = "test-label";
         const string message = "Test message";
 
+        Logging.Enable();
+        // Don't call Hold() first - buffer doesn't exist
+        Logging.WriteLog(message, LoggingLevel.Info, null, label);
+
+        var heldLogs = Logging.GetHeldLogs(label);
+        Ensure.Empty(heldLogs); // Should be empty because buffer wasn't created with Hold()
+    }
+
+    [Test]
+    public void WriteLog_WithExistingBuffer_BuffersLog()
+    {
+        const string label = "test-label";
+        const string message = "Test message";
+
+        Logging.Enable();
+        Logging.Hold(label); // Create buffer first
         Logging.WriteLog(message, LoggingLevel.Info, null, label);
 
         var heldLogs = Logging.GetHeldLogs(label);
@@ -91,17 +107,32 @@ public class LoggingTest
     }
 
     [Test]
-    public void WriteLog_WithLabelAndCustomColor_BuffersWithColor()
+    public void WriteLog_WithExistingBufferAndCustomColor_BuffersWithColor()
     {
         const string label = "color-test";
         const string message = "Colored message";
 
+        Logging.Enable();
+        Logging.Hold(label); // Create buffer first
         Logging.WriteLog(message, LoggingLevel.Warn, ConsoleColor.Cyan, label);
 
         var heldLogs = Logging.GetHeldLogs(label);
         Ensure.Single(heldLogs);
         Ensure.Equal(ConsoleColor.Cyan, heldLogs[0].ForegroundColor);
         Ensure.Equal(LoggingLevel.Warn, heldLogs[0].Level);
+    }
+
+    [Test]
+    public void WriteLog_WhenDisabled_DoesNotBuffer()
+    {
+        const string label = "disabled-test";
+
+        Logging.Hold(label); // Create buffer first
+        Logging.Disable();   // Disable logging
+        Logging.WriteLog("Test message", label: label);
+
+        var heldLogs = Logging.GetHeldLogs(label);
+        Ensure.Empty(heldLogs); // Should be empty because logging was disabled
     }
 
     [Test]
@@ -126,11 +157,13 @@ public class LoggingTest
     }
 
     [Test]
-    public void WriteDebug_WithLabel_BuffersWithDebugLevel()
+    public void WriteDebug_WithExistingBuffer_BuffersWithDebugLevel()
     {
         const string label = "debug-test";
         const string message = "Debug message";
 
+        Logging.Enable();
+        Logging.Hold(label); // Create buffer first
         Logging.WriteDebug(message, label);
 
         var heldLogs = Logging.GetHeldLogs(label);
@@ -141,11 +174,13 @@ public class LoggingTest
     }
 
     [Test]
-    public void WriteInfo_WithLabel_BuffersWithInfoLevel()
+    public void WriteInfo_WithExistingBuffer_BuffersWithInfoLevel()
     {
         const string label = "info-test";
         const string message = "Info message";
 
+        Logging.Enable();
+        Logging.Hold(label); // Create buffer first
         Logging.WriteInfo(message, label);
 
         var heldLogs = Logging.GetHeldLogs(label);
@@ -156,11 +191,13 @@ public class LoggingTest
     }
 
     [Test]
-    public void WriteWarn_WithLabel_BuffersWithWarnLevel()
+    public void WriteWarn_WithExistingBuffer_BuffersWithWarnLevel()
     {
         const string label = "warn-test";
         const string message = "Warning message";
 
+        Logging.Enable();
+        Logging.Hold(label); // Create buffer first
         Logging.WriteWarn(message, label);
 
         var heldLogs = Logging.GetHeldLogs(label);
@@ -171,11 +208,13 @@ public class LoggingTest
     }
 
     [Test]
-    public void WriteError_WithLabel_BuffersWithErrorLevel()
+    public void WriteError_WithExistingBuffer_BuffersWithErrorLevel()
     {
         const string label = "error-test";
         const string message = "Error message";
 
+        Logging.Enable();
+        Logging.Hold(label); // Create buffer first
         Logging.WriteError(message, label);
 
         var heldLogs = Logging.GetHeldLogs(label);
@@ -183,6 +222,19 @@ public class LoggingTest
         Ensure.Equal(message, heldLogs[0].Message);
         Ensure.Equal(LoggingLevel.Error, heldLogs[0].Level);
         Ensure.Equal(ConsoleColor.Red, heldLogs[0].ForegroundColor);
+    }
+
+    [Test]
+    public void WriteDebug_WithoutBuffer_DoesNotBuffer()
+    {
+        const string label = "no-buffer-debug";
+
+        Logging.Enable();
+        // Don't call Hold() first
+        Logging.WriteDebug("Debug message", label);
+
+        var heldLogs = Logging.GetHeldLogs(label);
+        Ensure.Empty(heldLogs); // Should be empty because buffer wasn't created
     }
 
     #endregion
@@ -241,10 +293,12 @@ public class LoggingTest
     [Test]
     public void GetHeldLogs_ExistingLabel_ReturnsLogsCopy()
     {
+        Logging.Enable();
         const string label = "test-label";
         const string message1 = "Message 1";
         const string message2 = "Message 2";
 
+        Logging.Hold(label);
         Logging.WriteLog(message1, label: label);
         Logging.WriteLog(message2, label: label);
 
@@ -262,6 +316,8 @@ public class LoggingTest
     [Test]
     public void WriteLog_MultipleSameLabel_AccumulatesLogs()
     {
+        Logging.Enable();
+        Logging.Hold("accumulate-test");
         const string label = "accumulate-test";
 
         Logging.WriteLog("Message 1", label: label);
@@ -281,6 +337,9 @@ public class LoggingTest
     [Test]
     public void WriteLog_DifferentLabels_StoresSeparately()
     {
+        Logging.Enable();
+        Logging.Hold("label1");
+        Logging.Hold("label2");
         Logging.WriteLog("Message for label 1", label: "label1");
         Logging.WriteLog("Message for label 2", label: "label2");
 
@@ -305,6 +364,9 @@ public class LoggingTest
     [Test]
     public void ClearHeldLogs_RemovesLogsForSpecificLabel()
     {
+        Logging.Enable();
+        Logging.Hold("label1");
+        Logging.Hold("label2");
         const string label1 = "label1";
         const string label2 = "label2";
 
@@ -347,15 +409,14 @@ public class LoggingTest
     [Test]
     public void GetBufferLabels_ReturnsAllLabels()
     {
+        Logging.Enable();
         Logging.WriteLog("Message 1", label: "label1");
         Logging.WriteLog("Message 2", label: "label2");
         Logging.Hold("label3"); // Empty buffer
 
         var labels = Logging.GetBufferLabels().ToList();
 
-        Ensure.Count(labels, 3);
-        Ensure.True(labels.Contains("label1"));
-        Ensure.True(labels.Contains("label2"));
+        Ensure.Count(labels, 1);
         Ensure.True(labels.Contains("label3"));
     }
 
@@ -374,6 +435,8 @@ public class LoggingTest
     public void LogEntry_HasCorrectTimestamp()
     {
         const string label = "timestamp-test";
+        Logging.Hold(label);
+        Logging.Enable();
         var beforeTime = DateTime.Now;
 
         Logging.WriteLog("Test message", label: label);
@@ -421,6 +484,7 @@ public class LoggingTest
     public void WriteLog_BuffersRegardlessOfLoggingState()
     {
         const string label = "state-test";
+        Logging.Hold("state-test");
 
         // Test with logging disabled
         Logging.Disable();
@@ -431,14 +495,15 @@ public class LoggingTest
         Logging.WriteLog("Message when enabled", label: label);
 
         var heldLogs = Logging.GetHeldLogs(label);
-        Ensure.Count(heldLogs, 2);
-        Ensure.Equal("Message when disabled", heldLogs[0].Message);
-        Ensure.Equal("Message when enabled", heldLogs[1].Message);
+        Ensure.Count(heldLogs, 1);
+        Ensure.Equal("Message when enabled", heldLogs[0].Message);
     }
 
     [Test]
     public void WriteLog_EmptyMessage_DoesNotThrow()
     {
+        Logging.Enable();
+        Logging.Hold("empty-test");
         Logging.WriteLog("");
         Logging.WriteLog("", label: "empty-test");
 
@@ -500,6 +565,69 @@ public class LoggingTest
         // Verify some logs were created
         var labels = Logging.GetBufferLabels().ToList();
         Ensure.True(labels.Count > 0);
+    }
+
+    [Test]
+    public void LoggingBehavior_RequiresEnableAndHold_ForBuffering()
+    {
+        const string label = "behavior-test";
+        const string message = "Test message";
+
+        // Test 1: Disabled + No Hold = No buffering
+        Logging.Disable();
+        Logging.WriteLog(message, label: label);
+        Ensure.Empty(Logging.GetHeldLogs(label));
+
+        // Test 2: Enabled + No Hold = No buffering
+        Logging.Enable();
+        Logging.WriteLog(message, label: label);
+        Ensure.Empty(Logging.GetHeldLogs(label));
+
+        // Test 3: Disabled + Hold = No buffering (because disabled)
+        Logging.Hold(label);
+        Logging.Disable();
+        Logging.WriteLog(message, label: label);
+        Ensure.Empty(Logging.GetHeldLogs(label));
+
+        // Test 4: Enabled + Hold = Buffering works!
+        Logging.Enable();
+        Logging.WriteLog(message, label: label);
+        Ensure.Single(Logging.GetHeldLogs(label));
+    }
+
+    [Test]
+    public void Hold_CreatesEmptyBuffer_ThatCanBeUsedLater()
+    {
+        const string label = "empty-buffer-test";
+
+        // Create empty buffer
+        Logging.Hold(label);
+
+        // Verify it exists but is empty
+        var labels = Logging.GetBufferLabels();
+        Ensure.True(labels.Contains(label));
+        Ensure.Empty(Logging.GetHeldLogs(label));
+
+        // Now use it
+        Logging.Enable();
+        Logging.WriteLog("Now it works", label: label);
+        Ensure.Single(Logging.GetHeldLogs(label));
+    }
+
+    [Test]
+    public void WriteLog_OnlyBuffersWhenBothEnabledAndBufferExists()
+    {
+        const string label1 = "exists";
+        const string label2 = "not-exists";
+
+        Logging.Enable();
+        Logging.Hold(label1); // Only create buffer for label1
+
+        Logging.WriteLog("Message 1", label: label1);  // Should buffer
+        Logging.WriteLog("Message 2", label: label2);  // Should NOT buffer
+
+        Ensure.Single(Logging.GetHeldLogs(label1));
+        Ensure.Empty(Logging.GetHeldLogs(label2));
     }
 
     #endregion
