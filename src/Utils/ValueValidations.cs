@@ -50,9 +50,7 @@ public static partial class ValueValidations
         }
 
         if (validValues != null)
-        {
             if (validValues.Contains(value)) return true;
-        }
 
         if (value is int intValue)
         {
@@ -75,10 +73,7 @@ public static partial class ValueValidations
             (stringPixel || stringRem || stringPercentage || stringInt || stringDouble) &&
             value is string str)
         {
-            if (allowNegative)
-            {
-                str = str.TrimStart('-');
-            }
+            if (allowNegative) str = str.TrimStart('-');
 
             if (stringPercentage)
             {

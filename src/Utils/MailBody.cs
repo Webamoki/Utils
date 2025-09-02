@@ -152,19 +152,13 @@ public class MailBody
     {
         var column1Content = "";
         var column1Enumator = column1Text.GetEnumerator();
-        while (column1Enumator.MoveNext())
-        {
-            column1Content += $"<p style=\"margin: 0;color: #000;font-size: 14px;\">{column1Enumator.Current}</p>";
-        }
+        while (column1Enumator.MoveNext()) column1Content += $"<p style=\"margin: 0;color: #000;font-size: 14px;\">{column1Enumator.Current}</p>";
 
         column1Enumator.Dispose();
 
         var column2Content = "";
         var column2Enumator = column2Text.GetEnumerator();
-        while (column2Enumator.MoveNext())
-        {
-            column2Content += $"<p style=\"margin: 0;color: #000;font-size: 14px;\">{column2Enumator.Current}</p>";
-        }
+        while (column2Enumator.MoveNext()) column2Content += $"<p style=\"margin: 0;color: #000;font-size: 14px;\">{column2Enumator.Current}</p>";
 
         column2Enumator.Dispose();
 

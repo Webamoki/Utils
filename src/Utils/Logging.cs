@@ -42,22 +42,15 @@ public static class Logging
 
         // Buffer the log if a label is provided
         if (!string.IsNullOrEmpty(label))
-        {
             lock (BufferLock)
             {
-                if (!LogBuffer.ContainsKey(label))
-                {
-                    LogBuffer[label] = [];
-                }
+                if (!LogBuffer.ContainsKey(label)) LogBuffer[label] = [];
 
                 LogBuffer[label].Add(logEntry);
             }
-        }
+
         // Write to console if logging is enabled
-        if (_isEnabled)
-        {
-            WriteLogEntry(logEntry);
-        }
+        if (_isEnabled) WriteLogEntry(logEntry);
     }
 
     /// <summary>
@@ -95,12 +88,8 @@ public static class Logging
     public static void Hold(string label)
     {
         lock (BufferLock)
-        {
             if (!LogBuffer.ContainsKey(label))
-            {
                 LogBuffer[label] = [];
-            }
-        }
     }
 
     /// <summary>
@@ -111,11 +100,9 @@ public static class Logging
     public static List<LogEntry> GetHeldLogs(string label)
     {
         lock (BufferLock)
-        {
             return LogBuffer.TryGetValue(label, out var logs)
                 ? [.. logs]
                 : [];
-        }
     }
 
     /// <summary>
@@ -124,10 +111,7 @@ public static class Logging
     /// <param name="label">The label to clear logs for</param>
     public static void ClearHeldLogs(string label)
     {
-        lock (BufferLock)
-        {
-            _ = LogBuffer.Remove(label, out _);
-        }
+        lock (BufferLock) _ = LogBuffer.Remove(label, out _);
     }
 
     /// <summary>
@@ -136,10 +120,7 @@ public static class Logging
     /// <returns>Collection of all buffer label names</returns>
     public static IEnumerable<string> GetBufferLabels()
     {
-        lock (BufferLock)
-        {
-            return LogBuffer.Keys.ToList();
-        }
+        lock (BufferLock) return LogBuffer.Keys.ToList();
     }
 
     /// <summary>
@@ -147,10 +128,7 @@ public static class Logging
     /// </summary>
     public static void ClearBuffer()
     {
-        lock (BufferLock)
-        {
-            LogBuffer.Clear();
-        }
+        lock (BufferLock) LogBuffer.Clear();
     }
 
     private static void WriteLogEntry(LogEntry logEntry)
